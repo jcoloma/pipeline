@@ -1,0 +1,19 @@
+@dsl.pipeline(
+     name = 'Hello world pipeline',
+     description = 'A demo pipeline'
+)
+def hello_world():
+
+    op1 = dsl.ContainerOp(
+        name = 'Download',
+        image = 'google/cloud-sdk:216.0.0',
+        command = ['gsutil', 'cp'],
+        arguments = ['gs://kfp-demo/hello.txt', '.'],
+    )
+
+    op2 = dsl.ContainerOp(
+        name = 'Print',
+        image = 'library/bash:4.4.23',
+        command = ['echo'],
+        arguments = [op1.output]
+    )
